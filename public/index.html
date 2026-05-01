@@ -8,22 +8,30 @@
   </head>
   <body>
     <main class="container">
-      <h1>TikTok Search</h1>
-      <p class="subtext">Search only. No watch history, no recommendations.</p>
+      <div class="app-shell">
+        <header class="hero">
+          <p class="brand">TikTok Explorer</p>
+          <h1>Find videos fast</h1>
+          <p class="subtext">Search only. No watch history, no recommendations.</p>
+        </header>
 
-      <form id="search-form" class="search-row">
-        <input
-          id="search-input"
-          type="text"
-          placeholder="Search videos..."
-          autocomplete="off"
-          required
-        />
-        <button id="search-btn" type="submit">Search</button>
-      </form>
+        <form id="search-form" class="search-row">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search videos..."
+            autocomplete="off"
+            required
+          />
+          <button id="search-btn" type="submit">Search</button>
+        </form>
 
-      <p id="status" class="status"></p>
-      <section id="results" class="results"></section>
+        <p id="status" class="status"></p>
+        <section id="results" class="results"></section>
+        <div id="load-more-wrap" class="load-more-wrap hidden">
+          <button id="load-more-btn" class="load-more-btn" type="button">Load more</button>
+        </div>
+      </div>
     </main>
 
     <script src="/app.js"></script>

@@ -14,6 +14,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/api/search", async (req, res) => {
   const query = String(req.query.q || "").trim();
   const count = Math.min(Math.max(Number(req.query.count) || 12, 1), 30);
+  const cursor = Math.max(Number(req.query.cursor) || 0, 0);
 
   if (!query) {
     return res.status(400).json({ error: "Missing query parameter: q" });
@@ -23,7 +24,7 @@ app.get("/api/search", async (req, res) => {
     const endpoint = new URL("https://tiktok-scraper7.p.rapidapi.com/feed/search");
     endpoint.searchParams.set("keywords", query);
     endpoint.searchParams.set("count", String(count));
-    endpoint.searchParams.set("cursor", "0");
+    endpoint.searchParams.set("cursor", String(cursor));
     endpoint.searchParams.set("publish_time", "0");
     endpoint.searchParams.set("sort_type", "0");
 
@@ -52,10 +53,13 @@ app.get("/api/search", async (req, res) => {
       const videoId = video?.video_id || "";
       const directTikTokUrl =
         authorId && videoId ? `https://www.tiktok.com/@${authorId}/video/${videoId}` : "";
+      const normalizedTitle = String(video?.title || "(No title)")
+        .replace(/\s+/g, " ")
+        .trim();
 
       return {
         id: videoId || video?.aweme_id || "",
-        title: video?.title || "(No title)",
+        title: normalizedTitle || "(No title)",
         thumbnail: video?.cover || video?.origin_cover || "",
         postedAt: video?.create_time ? new Date(video.create_time * 1000).toISOString() : null,
         stats: {
@@ -73,7 +77,17 @@ app.get("/api/search", async (req, res) => {
       };
     });
 
-    return res.json({ query, total: normalized.length, results: normalized });
+    const hasMore = Boolean(payload?.data?.hasMore);
+    const nextCursor = hasMore ? Number(payload?.data?.cursor ?? cursor) : null;
+
+    return res.json({
+      query,
+      total: normalized.length,
+      cursor,
+      hasMore,
+      nextCursor,
+      results: normalized
+    });
   } catch (error) {
     return res.status(500).json({
       error: "Server error while searching videos",
