@@ -1,0 +1,15 @@
+{
+  "name": "simple-tiktok-search",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal TikTok video search app with RapidAPI proxy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2"
+  }
+}
