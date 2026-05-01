@@ -43,7 +43,7 @@ function renderResults(items) {
       return `
         <article class="card">
           <img class="thumb" src="${thumbnail}" alt="Video thumbnail" loading="lazy" />
-          <div>
+          <div class="card-body">
             <h2 class="title">${title}</h2>
             <div class="meta">
               <span>Views: ${formatNumber(item.stats?.views)}</span>
